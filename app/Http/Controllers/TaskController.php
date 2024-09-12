@@ -14,15 +14,31 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $completedTasks = Task::complete()->inRandomOrder()->take(3)->get();
-        $inProgressTasks = Task::inProgress()->inRandomOrder()->take(3)->get();
-        $pendingTasks = Task::pending()->inRandomOrder()->take(3)->get();
+        return Inertia::render('Task/Index');
+    }
 
-        return Inertia::render('Task/Index', ['tasks' => [
-            'completed' => $completedTasks,
-            'inProgress' => $inProgressTasks,
-            'pending' => $pendingTasks,
-        ]]);
+    public function progress()
+    {
+        $inProgressTasks = Task::inProgress()->inRandomOrder()->paginate(3);
+        return Inertia::render('Task/InProgressTasks', [
+            'tasks' => $inProgressTasks
+        ]);
+    }
+
+    public function pending()
+    {
+        $pendingTasks = Task::pending()->inRandomOrder()->paginate(3);
+        return Inertia::render('Task/PendingTasks', [
+            'tasks' => $pendingTasks
+        ]);
+    }
+
+    public function complete()
+    {
+        $completedTasks = Task::complete()->inRandomOrder()->paginate(3);
+        return Inertia::render('Task/CompletedTasks', [
+            'tasks' => $completedTasks
+        ]);
     }
 
     /**
