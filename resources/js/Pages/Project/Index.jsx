@@ -1,13 +1,15 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Index({ auth }) {
+export default function Index({ auth, projects }) {
+    console.log(projects.data);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    Project
+                    Projects
                 </h2>
             }
         >

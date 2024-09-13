@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Inertia\Inertia;
 
@@ -14,30 +15,34 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Task/Index');
+        $tasks = Task::inRandomOrder()->take(5)->get();
+
+        return Inertia::render('Task/Index', [
+            'tasks' => TaskResource::collection($tasks)
+        ]);
     }
 
     public function progress()
     {
-        $inProgressTasks = Task::inProgress()->inRandomOrder()->paginate(3);
+        $inProgressTasks = Task::inProgress();
         return Inertia::render('Task/InProgressTasks', [
-            'tasks' => $inProgressTasks
+            'tasks' => TaskResource::collection($inProgressTasks->paginate(5))
         ]);
     }
 
     public function pending()
     {
-        $pendingTasks = Task::pending()->inRandomOrder()->paginate(3);
+        $pendingTasks = Task::pending();
         return Inertia::render('Task/PendingTasks', [
-            'tasks' => $pendingTasks
+            'tasks' => TaskResource::collection($pendingTasks->paginate(5))
         ]);
     }
 
     public function complete()
     {
-        $completedTasks = Task::complete()->inRandomOrder()->paginate(3);
+        $completedTasks = Task::complete();
         return Inertia::render('Task/CompletedTasks', [
-            'tasks' => $completedTasks
+            'tasks' => TaskResource::collection($completedTasks->paginate(5))
         ]);
     }
 
